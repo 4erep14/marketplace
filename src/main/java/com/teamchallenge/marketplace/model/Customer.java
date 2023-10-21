@@ -1,6 +1,8 @@
 package com.teamchallenge.marketplace.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,8 +17,11 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class Customer extends User {
-
+    @NotEmpty(message = "it can't be empty")
+    @Size(min = 1, max=100, message = "......")
     private String firstName;
+    @NotEmpty(message = "it can't be empty")
+    @Size(min = 1, max=100, message = "......")
     private String lastName;
     private LocalDate birthDate;
     @OneToMany

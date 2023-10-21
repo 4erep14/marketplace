@@ -1,6 +1,7 @@
 package com.teamchallenge.marketplace.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,13 +13,17 @@ import java.util.List;
 @Setter
 @MappedSuperclass
 @NoArgsConstructor
-public abstract class User {
+public  class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+
     private long id;
+    @NotEmpty(message = "it can't be empty")
     private String email;
+    @NotEmpty(message = "it can't be empty")
     private String password;
+    @NotEmpty(message = "it can't be empty")
     private String phone;
 
     public User(String email, String password, String phone) {

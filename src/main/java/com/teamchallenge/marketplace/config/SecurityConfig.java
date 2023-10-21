@@ -1,5 +1,6 @@
 package com.teamchallenge.marketplace.config;
 
+import com.teamchallenge.marketplace.security.AuthProviderIMPL;
 import com.teamchallenge.marketplace.services.PersonDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,16 +13,18 @@ import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.security.AuthProvider;
+
 @EnableWebSecurity
 public class SecurityConfig extends SecurityConfigurerAdapter {
-    private PersonDetailsService personDetailsService;
+    private final AuthProviderIMPL authProvider;
     @Autowired
-    public SecurityConfig(PersonDetailsService personDetailsService) {
-        this.personDetailsService = personDetailsService;
+    public SecurityConfig(AuthProviderIMPL authProvider) {
+        this.authProvider = authProvider;
     }
 
-    protected void configure (AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(personDetailsService);
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authProvider);
     }
 
 

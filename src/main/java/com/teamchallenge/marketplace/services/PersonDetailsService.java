@@ -1,7 +1,7 @@
 package com.teamchallenge.marketplace.services;
 
 import com.teamchallenge.marketplace.model.User;
-import com.teamchallenge.marketplace.repositories.UserRepo;
+import com.teamchallenge.marketplace.repositories.PeopleRepository;
 import com.teamchallenge.marketplace.security.PersonDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,18 +13,18 @@ import java.util.Optional;
 
 @Service
 public class PersonDetailsService implements UserDetailsService {
-    private UserRepo userRepo;
+    private PeopleRepository peopleRepository;
     @Autowired
 
-    public PersonDetailsService(UserRepo userRepo) {
-        this.userRepo = userRepo;
+    public PersonDetailsService(PeopleRepository peopleRepository) {
+        this.peopleRepository = peopleRepository;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> userOptional= userRepo.findById(username);
-        if (userOptional.isEmpty())
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        Optional<User> user= peopleRepository.findByUserName(s);
+        if (user.isEmpty())
             throw new UsernameNotFoundException("User not found!");
-        return new PersonDetails(userOptional.get());
+        return new PersonDetails(user.get());
     }
 }
