@@ -2,18 +2,18 @@ package com.teamchallenge.marketplace.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
+@SuperBuilder
 @MappedSuperclass
 @NoArgsConstructor
-public  class User {
+@AllArgsConstructor
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,12 +23,8 @@ public  class User {
     private String email;
     @NotEmpty(message = "it can't be empty")
     private String password;
-    @NotEmpty(message = "it can't be empty")
+   // @NotEmpty(message = "it can't be empty")
     private String phone;
-
-    public User(String email, String password, String phone) {
-        this.email = email;
-        this.password = password;
-        this.phone = phone;
-    }
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }
