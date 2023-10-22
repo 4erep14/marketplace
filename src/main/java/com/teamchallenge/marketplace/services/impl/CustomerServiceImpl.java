@@ -1,25 +1,19 @@
 package com.teamchallenge.marketplace.services.impl;
 
 import com.teamchallenge.marketplace.model.Customer;
-import com.teamchallenge.marketplace.model.Seller;
 import com.teamchallenge.marketplace.repositories.CustomerRepository;
-import com.teamchallenge.marketplace.repositories.SellerRepository;
 import com.teamchallenge.marketplace.services.CustomerService;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
-
-    @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
-    }
 
     @Override
     public Customer create(Customer customer) {

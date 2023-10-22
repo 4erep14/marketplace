@@ -1,7 +1,6 @@
 package com.teamchallenge.marketplace.security;
 
 import com.teamchallenge.marketplace.model.User;
-import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
