@@ -4,20 +4,23 @@ package com.teamchallenge.marketplace.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
-@SuperBuilder
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "sellers")
-public class Seller extends User {
+@Table(name = "stores")
+public class Store {
+    @Id
+    @GeneratedValue
+    private long id;
     @NotEmpty(message = "it can't be empty")
     private String companyName;
     @OneToMany
     private List<Product> products;
-
+    @OneToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
 }
