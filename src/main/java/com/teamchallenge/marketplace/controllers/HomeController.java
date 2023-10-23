@@ -17,13 +17,12 @@ public class HomeController {
     private final UserService service;
 
     @GetMapping("/")
-    public ResponseEntity<String> sayHello() {
-        service.create(User.builder()
-                        .firstName("Pisya")
-                        .lastName("Popa")
-                        .email("user@mail.com")
-                        .password("kakshechka")
-                .build());
-        return ResponseEntity.ok("Hello from secured endpoint");
+    public String sayHello() {
+        return "Hello, Home!";
+    }
+
+    @GetMapping("/secured")
+    public String secured() {
+        return "Hello, secured!";
     }
 }
