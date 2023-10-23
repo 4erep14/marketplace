@@ -27,13 +27,13 @@ public class Product {
     @ManyToOne
     private Category category;
     @ManyToOne
-    private Seller seller;
+    private Store store;
 
-    public Product(String name, String description, int price, Category category, Seller seller) {
+    public Product(String name, String description, int price, Category category, Store store) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.category = category;
-        this.seller = seller;
+        this.store = store;
     }
 }
