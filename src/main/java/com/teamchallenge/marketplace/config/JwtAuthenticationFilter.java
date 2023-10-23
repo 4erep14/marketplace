@@ -1,6 +1,5 @@
 package com.teamchallenge.marketplace.config;
 
-import com.teamchallenge.marketplace.security.SecurityUser;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

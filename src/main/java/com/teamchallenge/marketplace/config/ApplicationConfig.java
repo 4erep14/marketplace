@@ -1,9 +1,7 @@
 package com.teamchallenge.marketplace.config;
 
 import com.teamchallenge.marketplace.security.SecurityUser;
-import com.teamchallenge.marketplace.services.CustomerService;
-import com.teamchallenge.marketplace.services.SellerService;
-import jakarta.persistence.EntityNotFoundException;
+import com.teamchallenge.marketplace.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,19 +17,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-    private final CustomerService customerService;
-    private final SellerService sellerService;
+    private final UserService userService;
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> {
-            try {
-                return new SecurityUser(customerService.readByEmail(username));
-            } catch (EntityNotFoundException e) {
-                return new SecurityUser(sellerService.readByEmail(username));
-            }
-        };
-    }
+        return username -> new SecurityUser(userService.readByEmail(username));
+    };
 
     @Bean
     public AuthenticationProvider authenticationProvider() {

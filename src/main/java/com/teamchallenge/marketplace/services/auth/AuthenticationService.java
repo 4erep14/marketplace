@@ -3,13 +3,13 @@ package com.teamchallenge.marketplace.services.auth;
 import com.teamchallenge.marketplace.config.JwtService;
 import com.teamchallenge.marketplace.dto.auth.AuthenticationRequest;
 import com.teamchallenge.marketplace.dto.auth.AuthenticationResponse;
-import com.teamchallenge.marketplace.dto.auth.CustomerRegisterRequest;
-import com.teamchallenge.marketplace.dto.auth.SellerRegisterRequest;
-import com.teamchallenge.marketplace.model.Customer;
+import com.teamchallenge.marketplace.dto.auth.RegisterRequest;
+import com.teamchallenge.marketplace.dto.auth.StoreRegisterRequest;
 import com.teamchallenge.marketplace.model.Role;
-import com.teamchallenge.marketplace.model.Seller;
-import com.teamchallenge.marketplace.repositories.CustomerRepository;
-import com.teamchallenge.marketplace.repositories.SellerRepository;
+import com.teamchallenge.marketplace.model.Store;
+import com.teamchallenge.marketplace.model.User;
+import com.teamchallenge.marketplace.repositories.UserRepository;
+import com.teamchallenge.marketplace.repositories.StoreRepository;
 import com.teamchallenge.marketplace.security.SecurityUser;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -18,40 +18,46 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    private final CustomerRepository customerRepository;
-    private final SellerRepository sellerRepository;
+    private final UserRepository userRepository;
+    private final StoreRepository storeRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse registerCustomer(CustomerRegisterRequest request) {
-        var customer = Customer.builder()
+    public AuthenticationResponse registerUser(RegisterRequest request) {
+        var user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
-        customerRepository.save(customer);
-        var jwtToken = jwtService.generateToken(new SecurityUser(customer));
+        userRepository.save(user);
+        var jwtToken = jwtService.generateToken(new SecurityUser(user));
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
     }
 
-    public AuthenticationResponse registerSeller(SellerRegisterRequest request) {
-        var seller = Seller.builder()
+    public AuthenticationResponse registerStore(StoreRegisterRequest request) {
+        var user = userRepository.findByEmail(request.getEmail()).orElseThrow(
+                        () -> new EntityNotFoundException("User with email " + request.getEmail() + " not found")
+        );
+        var store = Store.builder()
+                .owner(user)
                 .companyName(request.getCompanyName())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
                 .build();
-        sellerRepository.save(seller);
-        var jwtToken = jwtService.generateToken(new SecurityUser(seller));
+        storeRepository.save(store);
+        var jwtToken = jwtService.generateToken(
+                Map.of("company_name", request.getCompanyName()),
+                new SecurityUser(user)
+        );
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
@@ -64,7 +70,7 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        var customer = customerRepository.findByEmail(request.getEmail()).orElseThrow(
+        var customer = userRepository.findByEmail(request.getEmail()).orElseThrow(
                 () -> new EntityNotFoundException("User with email " + request.getEmail() + " not found")
         );
         var jwtToken = jwtService.generateToken(new SecurityUser(customer));
@@ -73,17 +79,20 @@ public class AuthenticationService {
                 .build();
     }
 
-    public AuthenticationResponse authenticateSeller(AuthenticationRequest request) {
+    public AuthenticationResponse authenticateStore(AuthenticationRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
                         request.getPassword()
                 )
         );
-        var seller = sellerRepository.findByEmail(request.getEmail()).orElseThrow(
-                () -> new EntityNotFoundException("User with email " + " not found")
+        var user = userRepository.findByEmail(request.getEmail()).orElseThrow(
+                () -> new EntityNotFoundException("User with email " + request.getEmail() + " not found")
         );
-        var jwtToken = jwtService.generateToken(new SecurityUser(seller));
+        var jwtToken = jwtService.generateToken(
+                Map.of("company_name", user.getStore().getCompanyName()),
+                new SecurityUser(user)
+        );
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
