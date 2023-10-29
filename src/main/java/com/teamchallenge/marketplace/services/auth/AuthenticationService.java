@@ -36,13 +36,12 @@ public class AuthenticationService {
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .phone(request.getPhone())
                 .role(Role.USER)
                 .build();
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(new SecurityUser(user));
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+        return new AuthenticationResponse(jwtToken);
     }
 
     public AuthenticationResponse registerStore(StoreRegisterRequest request) {
@@ -58,9 +57,7 @@ public class AuthenticationService {
                 Map.of("company_name", request.getCompanyName()),
                 new SecurityUser(user)
         );
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+        return new AuthenticationResponse(jwtToken);
     }
 
     public AuthenticationResponse authenticateCustomer(AuthenticationRequest request) {
@@ -74,9 +71,7 @@ public class AuthenticationService {
                 () -> new EntityNotFoundException("User with email " + request.getEmail() + " not found")
         );
         var jwtToken = jwtService.generateToken(new SecurityUser(customer));
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+        return new AuthenticationResponse(jwtToken);
     }
 
     public AuthenticationResponse authenticateStore(AuthenticationRequest request) {
@@ -93,8 +88,6 @@ public class AuthenticationService {
                 Map.of("company_name", user.getStore().getCompanyName()),
                 new SecurityUser(user)
         );
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+        return new AuthenticationResponse(jwtToken);
     }
 }
