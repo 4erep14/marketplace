@@ -1,4 +1,4 @@
-package com.teamchallenge.marketplace.dto.auth;
+package com.teamchallenge.marketplace.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class AuthenticationRequest {
-
-    private String email;
-    private String password;
+public class CategoryRequestDto {
+    private String name;
 }

@@ -3,15 +3,17 @@ package com.teamchallenge.marketplace.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "products")
-@Getter
-@Setter
-@NoArgsConstructor
 public class Product {
 
     @Id
@@ -28,12 +30,4 @@ public class Product {
     private Category category;
     @ManyToOne
     private Store store;
-
-    public Product(String name, String description, int price, Category category, Store store) {
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.category = category;
-        this.store = store;
-    }
 }

@@ -2,19 +2,16 @@ package com.teamchallenge.marketplace.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "categories")
-@Getter
-@Setter
-@NoArgsConstructor
 public class Category {
 
     @Id
@@ -24,9 +21,4 @@ public class Category {
     private String name;
     @OneToMany
     private List<Product> products;
-
-    public Category(String name) {
-        this.name = name;
-        this.products = new ArrayList<>();
-    }
 }
