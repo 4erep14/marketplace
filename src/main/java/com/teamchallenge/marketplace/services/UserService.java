@@ -1,7 +1,9 @@
 package com.teamchallenge.marketplace.services;
 
+import com.teamchallenge.marketplace.dto.auth.ChangePasswordRequest;
 import com.teamchallenge.marketplace.model.User;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface UserService {
@@ -11,4 +13,5 @@ public interface UserService {
     User update(User user);
     void delete(long id);
     List<User> getAll();
+    void changePassword(ChangePasswordRequest request, Principal connectedUser);
 }

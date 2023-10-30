@@ -23,6 +23,7 @@ public class Product {
     @Size(min = 5, max=100, message = "......")
     private String name;
     @NotEmpty(message = "it can't be empty")
+    @Size(min=60, message = "it should not be less than 60 symbols")
     private String description;
     @NotEmpty(message = "it can't be empty")
     private int price;

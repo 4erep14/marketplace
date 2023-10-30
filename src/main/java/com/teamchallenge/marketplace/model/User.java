@@ -23,13 +23,12 @@ public class User {
     private String email;
     @NotEmpty(message = "it can't be empty")
     private String password;
-   // @NotEmpty(message = "it can't be empty")
+    @Size(max=9)
     private String phone;
     @NotEmpty(message = "it can't be empty")
-    @Size(min = 1, max=100, message = "......")
+    @Size(min = 2, max=100, message = "......")
     private String firstName;
-    @NotEmpty(message = "it can't be empty")
-    @Size(min = 1, max=100, message = "......")
+    @Size(min = 2, max=100, message = "......")
     private String lastName;
     @Enumerated(EnumType.STRING)
     private Role role;

@@ -29,4 +29,18 @@ public class AuthController {
     ) {
         return ResponseEntity.ok(service.authenticateCustomer(request));
     }
+    @PostMapping("/validation")
+    public  ResponseEntity<String> postUserValidation(
+            @RequestBody RegisterRequest registerRequest, StoreRegisterRequest storeRegisterRequest ){
+        final String userValidation= String.valueOf(service.registerUser(registerRequest));
+        return ResponseEntity
+                .accepted()
+                .body(userValidation);
+    }
+    @GetMapping("/error")
+    public ResponseEntity<?> throwException(){
+        return ResponseEntity.ok(service.throwException());
+    }
+
+
 }
