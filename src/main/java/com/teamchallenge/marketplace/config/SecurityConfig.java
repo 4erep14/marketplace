@@ -31,16 +31,16 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers(WHITE_LIST)
-                        .permitAll();
+                            .permitAll();
                     auth.anyRequest()
-                        .authenticated();
+                            .authenticated();
                 })
                 .formLogin(withDefaults())
                 .oauth2Login(withDefaults());
-               // .sessionManagement(session -> session
-               //         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                //.authenticationProvider(authenticationProvider)
-                //.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        // .sessionManagement(session -> session
+        //         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        //.authenticationProvider(authenticationProvider)
+        //.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

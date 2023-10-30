@@ -1,13 +1,14 @@
 package com.teamchallenge.marketplace.controllers;
 
 //import com.teamchallenge.marketplace.model.Customer;
+import com.teamchallenge.marketplace.dto.auth.ChangePasswordRequest;
 import com.teamchallenge.marketplace.model.User;
 import com.teamchallenge.marketplace.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,8 +22,14 @@ public class HomeController {
         return "Hello, Home!";
     }
 
-    @GetMapping("/secured")
-    public String secured() {
-        return "Hello, secured!";
+    @PatchMapping
+    public ResponseEntity<?> changePassword(
+            @RequestBody ChangePasswordRequest request,
+            Principal connectedUser
+    ){
+        service.changePassword(request, connectedUser);
+        return ResponseEntity
+                .ok()
+                .build();
     }
 }

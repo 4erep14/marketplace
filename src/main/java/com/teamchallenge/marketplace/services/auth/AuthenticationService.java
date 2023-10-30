@@ -11,6 +11,7 @@ import com.teamchallenge.marketplace.model.User;
 import com.teamchallenge.marketplace.repositories.UserRepository;
 import com.teamchallenge.marketplace.repositories.StoreRepository;
 import com.teamchallenge.marketplace.security.SecurityUser;
+import com.teamchallenge.marketplace.validation.UserValidator;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,6 +30,8 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final UserValidator<RegisterRequest> userValidator;
+    private final UserValidator<StoreRegisterRequest> storeRegisterRequestUserValidator;
 
     public AuthenticationResponse registerUser(RegisterRequest request) {
         var user = User.builder()
@@ -90,4 +93,18 @@ public class AuthenticationService {
         );
         return new AuthenticationResponse(jwtToken);
     }
+    public String validationsRegisterRequest(RegisterRequest registerRequest) {
+       userValidator.validate(registerRequest);
+
+        return "";
+    }
+
+    public String validationsStore(StoreRegisterRequest storeRegisterRequest) {
+        storeRegisterRequestUserValidator.validate(storeRegisterRequest);
+        return "";
+    }
+    public String throwException(){
+        throw new IllegalStateException("Some exception happened");
+    }
+
 }
