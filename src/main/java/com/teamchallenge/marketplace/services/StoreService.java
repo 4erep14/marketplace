@@ -1,5 +1,6 @@
 package com.teamchallenge.marketplace.services;
 
+import com.teamchallenge.marketplace.exception.NullEntityReferenceException;
 import com.teamchallenge.marketplace.model.Store;
 import com.teamchallenge.marketplace.repositories.StoreRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -22,7 +23,7 @@ public class StoreService {
         if(store !=null) {
             return storeRepository.save(store);
         } else {
-            throw new NullPointerException("Seller cannot be null");
+            throw new NullEntityReferenceException("Seller cannot be null");
         }
     }
 
@@ -42,7 +43,7 @@ public class StoreService {
         if (store != null) {
             return storeRepository.save(store);
         }
-        throw new NullPointerException("User cannot be 'null'");
+        throw new NullEntityReferenceException("User cannot be 'null'");
     }
 
     public void delete(long id) { storeRepository.delete(readById(id)); }

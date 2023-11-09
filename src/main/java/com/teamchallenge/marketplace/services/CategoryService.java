@@ -1,5 +1,6 @@
 package com.teamchallenge.marketplace.services;
 
+import com.teamchallenge.marketplace.exception.NullEntityReferenceException;
 import com.teamchallenge.marketplace.model.Category;
 import com.teamchallenge.marketplace.repositories.CategoryRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -18,7 +19,7 @@ public class CategoryService {
         if (category != null) {
             return categoryRepository.save(category);
         } else {
-            throw new NullPointerException("Category cannot be null");
+            throw new NullEntityReferenceException("Category cannot be null");
         }
     }
 
@@ -32,7 +33,7 @@ public class CategoryService {
         if (category != null) {
             return categoryRepository.save(category);
         } else {
-            throw new NullPointerException("Category cannot be null");
+            throw new NullEntityReferenceException("Category cannot be null");
         }
     }
 

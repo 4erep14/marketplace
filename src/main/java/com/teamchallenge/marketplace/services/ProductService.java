@@ -1,5 +1,6 @@
 package com.teamchallenge.marketplace.services;
 
+import com.teamchallenge.marketplace.exception.NullEntityReferenceException;
 import com.teamchallenge.marketplace.model.Product;
 import com.teamchallenge.marketplace.repositories.CategoryRepository;
 import com.teamchallenge.marketplace.repositories.ProductRepository;
@@ -20,7 +21,7 @@ public class ProductService {
         if (product != null) {
             return productRepository.save(product);
         } else {
-            throw new NullPointerException("Product cannot be null");
+            throw new NullEntityReferenceException("Product cannot be null");
         }
     }
 
@@ -34,7 +35,7 @@ public class ProductService {
         if (product != null) {
             return productRepository.save(product);
         } else {
-            throw new NullPointerException("Product cannot be null");
+            throw new NullEntityReferenceException("Product cannot be null");
         }
     }
 

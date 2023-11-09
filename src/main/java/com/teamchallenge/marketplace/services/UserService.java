@@ -1,6 +1,7 @@
 package com.teamchallenge.marketplace.services;
 
 import com.teamchallenge.marketplace.dto.auth.ChangePasswordRequest;
+import com.teamchallenge.marketplace.exception.NullEntityReferenceException;
 import com.teamchallenge.marketplace.model.User;
 import com.teamchallenge.marketplace.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -30,7 +31,7 @@ public class UserService {
         if(user !=null) {
             return userRepository.save(user);
         } else {
-            throw new NullPointerException("Seller cannot be null");
+            throw new NullEntityReferenceException("Seller cannot be null");
         }
     }
 
@@ -50,7 +51,7 @@ public class UserService {
         if (user != null) {
             return userRepository.save(user);
         }
-        throw new NullPointerException("User cannot be 'null'");
+        throw new NullEntityReferenceException("User cannot be 'null'");
     }
 
     public void delete(long id) { userRepository.delete(readById(id)); }
