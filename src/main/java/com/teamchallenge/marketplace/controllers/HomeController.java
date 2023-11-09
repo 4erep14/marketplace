@@ -31,5 +31,5 @@ public class HomeController {
         return ResponseEntity
                 .ok()
                 .build();
-    }
+  }
 }

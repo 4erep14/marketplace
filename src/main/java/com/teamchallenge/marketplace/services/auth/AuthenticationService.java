@@ -14,6 +14,8 @@ import com.teamchallenge.marketplace.security.SecurityUser;
 import com.teamchallenge.marketplace.validation.UserValidator;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,8 +34,11 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final UserValidator<RegisterRequest> userValidator;
     private final UserValidator<StoreRegisterRequest> storeRegisterRequestUserValidator;
+    private final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
 
     public AuthenticationResponse registerUser(RegisterRequest request) {
+        logger.info("Registering new user with email:{}", request.getEmail());
+        userValidator.validate(request);
         var user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
@@ -44,10 +49,12 @@ public class AuthenticationService {
                 .build();
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(new SecurityUser(user));
+        logger.info("Generated JWT token for user:{}", user.getEmail());
         return new AuthenticationResponse(jwtToken);
     }
 
     public AuthenticationResponse registerStore(StoreRegisterRequest request) {
+        logger.info("Registering new store with email:{}", request.getEmail());
         var user = userRepository.findByEmail(request.getEmail()).orElseThrow(
                         () -> new EntityNotFoundException("User with email " + request.getEmail() + " not found")
         );
@@ -60,10 +67,12 @@ public class AuthenticationService {
                 Map.of("company_name", request.getCompanyName()),
                 new SecurityUser(user)
         );
+        logger.info("Generated JWT token for store:{}", store.getCompanyName());
         return new AuthenticationResponse(jwtToken);
     }
 
     public AuthenticationResponse authenticateCustomer(AuthenticationRequest request) {
+        logger.info("Authenticating  customer with email:{}", request.getEmail());
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -74,10 +83,12 @@ public class AuthenticationService {
                 () -> new EntityNotFoundException("User with email " + request.getEmail() + " not found")
         );
         var jwtToken = jwtService.generateToken(new SecurityUser(customer));
+        logger.info("Generated JWT token for store:{}", customer.getEmail());
         return new AuthenticationResponse(jwtToken);
     }
 
     public AuthenticationResponse authenticateStore(AuthenticationRequest request) {
+        logger.info("Authenticating store with email:{}", request.getEmail());
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -91,19 +102,24 @@ public class AuthenticationService {
                 Map.of("company_name", user.getStore().getCompanyName()),
                 new SecurityUser(user)
         );
+        logger.info("Generated JWT token for store:{}", user.getStore().getCompanyName());
         return new AuthenticationResponse(jwtToken);
     }
     public String validationsRegisterRequest(RegisterRequest registerRequest) {
-       userValidator.validate(registerRequest);
-
+        logger.info("Validating user with email:{}", registerRequest.getEmail());
+        userValidator.validate(registerRequest);
+        logger.info("Registration request validation succesful");
         return "";
     }
 
     public String validationsStore(StoreRegisterRequest storeRegisterRequest) {
+        logger.info("Validating store with email:{}", storeRegisterRequest.getEmail());
         storeRegisterRequestUserValidator.validate(storeRegisterRequest);
+        logger.info("Store registration request validation succesful");
         return "";
     }
     public String throwException(){
+
         throw new IllegalStateException("Some exception happened");
     }
 
