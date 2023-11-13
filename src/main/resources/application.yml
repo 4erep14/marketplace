@@ -1,0 +1,34 @@
+server:
+  port: 9090
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/marketplace
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 893497841115-e3vikk0chh4kqftoc1dpqttr9rl7l1kh.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - email
+              - profile
+          facebook:
+            client-id: 281625490938295
+            client-secret: 484f349808397f27313b3dbbcf6ba64e
+            scope:
+              - email
+              - public_profile
