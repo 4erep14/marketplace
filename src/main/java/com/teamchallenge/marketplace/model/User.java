@@ -32,6 +32,7 @@ public class User {
     private String lastName;
     @Enumerated(EnumType.STRING)
     private Role role;
+    private String providerId;
     private LocalDate birthDate;
     @OneToOne
     @JoinColumn(name = "store_id")

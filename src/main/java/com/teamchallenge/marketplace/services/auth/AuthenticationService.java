@@ -5,6 +5,7 @@ import com.teamchallenge.marketplace.dto.auth.AuthenticationRequest;
 import com.teamchallenge.marketplace.dto.auth.AuthenticationResponse;
 import com.teamchallenge.marketplace.dto.auth.RegisterRequest;
 import com.teamchallenge.marketplace.dto.auth.StoreRegisterRequest;
+import com.teamchallenge.marketplace.model.Provider;
 import com.teamchallenge.marketplace.model.Role;
 import com.teamchallenge.marketplace.model.Store;
 import com.teamchallenge.marketplace.model.User;
@@ -46,6 +47,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .phone(request.getPhone())
                 .role(Role.USER)
+                .providerId(Provider.local.name())
                 .build();
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(new SecurityUser(user));

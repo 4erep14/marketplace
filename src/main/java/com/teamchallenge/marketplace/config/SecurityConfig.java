@@ -1,5 +1,6 @@
 package com.teamchallenge.marketplace.config;
 
+import com.teamchallenge.marketplace.services.auth.OAuth2UserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,9 +12,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import static org.springframework.security.config.Customizer.withDefaults;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -21,11 +21,14 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthFilter;
+    private final OAuth2UserDetailsService oAuth2UserDetailsService;
+    private final SimpleUrlAuthenticationSuccessHandler successHandler;
+    private final SimpleUrlAuthenticationFailureHandler failureHandler;
     private final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
     private final static String[] WHITE_LIST={
             "/api/v1/auth/**",
-            "/api/v1/"
+            "/login"
     };
 
     @Bean
@@ -40,12 +43,21 @@ public class SecurityConfig {
                     auth.anyRequest()
                             .authenticated();
                 })
-                .formLogin(withDefaults())
-                .oauth2Login(withDefaults());
-        // .sessionManagement(session -> session
-        //         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        //.authenticationProvider(authenticationProvider)
-        //.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+//                .formLogin(withDefaults())
+                .oauth2Login(formLogin -> formLogin
+                        .defaultSuccessUrl("/v1/api/", true)
+                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
+                                .userService(oAuth2UserDetailsService))
+                        .successHandler(successHandler)
+                        .failureHandler(failureHandler))
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
+
+                ;
+//         .sessionManagement(session -> session
+//                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//        .authenticationProvider(authenticationProvider)
+//        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
