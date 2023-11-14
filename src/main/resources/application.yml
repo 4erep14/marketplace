@@ -21,14 +21,14 @@ spring:
       client:
         registration:
           google:
-            client-id: 893497841115-e3vikk0chh4kqftoc1dpqttr9rl7l1kh.apps.googleusercontent.com
-            client-secret: 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
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
             scope:
               - email
               - profile
           facebook:
-            client-id: 281625490938295
-            client-secret: 484f349808397f27313b3dbbcf6ba64e
+            client-id: ${FACEBOOK_CLIENT_ID}
+            client-secret: ${FACEBOOK_CLIENT_SECRET}
             scope:
               - email
               - public_profile
