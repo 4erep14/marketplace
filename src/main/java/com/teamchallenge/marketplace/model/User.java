@@ -20,6 +20,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @NotEmpty(message = "it can't be empty")
+    @Column(unique = true)
     private String email;
     @NotEmpty(message = "it can't be empty")
     private String password;

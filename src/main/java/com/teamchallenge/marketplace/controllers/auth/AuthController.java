@@ -26,7 +26,7 @@ public class AuthController {
         logInfo.info("User registration request:{}", request.getEmail());
         AuthenticationResponse response=service.registerUser(request);
         logInfo.info("User registered:{}", response.token());
-        return ResponseEntity.ok(service.registerUser(request));
+        return ResponseEntity.ok(response);
     }
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticateUser(
@@ -49,6 +49,7 @@ public class AuthController {
                 .body(userValidation);
 
     }
+
     @GetMapping("/error")
     public ResponseEntity<?> throwException(){
         try {

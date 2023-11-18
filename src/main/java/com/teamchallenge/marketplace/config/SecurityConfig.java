@@ -2,6 +2,7 @@ package com.teamchallenge.marketplace.config;
 
 import com.teamchallenge.marketplace.services.auth.OAuth2UserDetailsService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -14,10 +15,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@Slf4j
 public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthFilter;
@@ -28,7 +31,7 @@ public class SecurityConfig {
 
     private final static String[] WHITE_LIST={
             "/api/v1/auth/**",
-            "/login"
+            "/login",
     };
 
     @Bean
@@ -43,21 +46,16 @@ public class SecurityConfig {
                     auth.anyRequest()
                             .authenticated();
                 })
-//                .formLogin(withDefaults())
-                .oauth2Login(formLogin -> formLogin
-                        .defaultSuccessUrl("/v1/api/", true)
-                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
-                                .userService(oAuth2UserDetailsService))
-                        .successHandler(successHandler)
-                        .failureHandler(failureHandler))
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
-
-                ;
-//         .sessionManagement(session -> session
-//                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//        .authenticationProvider(authenticationProvider)
-//        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+             //   .oauth2Login(formLogin -> formLogin
+               //         .defaultSuccessUrl("/", true)
+                 //       .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
+                       //         .userService(oAuth2UserDetailsService))
+                   //     .successHandler(successHandler)
+                     //   .failureHandler(failureHandler))
+         .sessionManagement(session -> session
+                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authenticationProvider(authenticationProvider)
+        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
