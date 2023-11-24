@@ -4,8 +4,8 @@ server:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/marketplace
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    username: postgres
+    password: root
     driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: true
@@ -32,3 +32,14 @@ spring:
             scope:
               - email
               - public_profile
+mail:
+  host: smtp.gmail.com
+  port: 587
+  username: nazariykabak@gmail.com
+  password: tcch vbws utaq pqpy
+  properties:
+    mail:
+      smtp:
+        auth: true
+        starttls:
+          enable: true
