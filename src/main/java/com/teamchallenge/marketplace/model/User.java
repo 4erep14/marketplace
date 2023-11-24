@@ -2,6 +2,7 @@ package com.teamchallenge.marketplace.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -20,9 +21,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @NotEmpty(message = "it can't be empty")
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
+    @Pattern(regexp = "^[a-zA-Z0-9.-_]+@[a-zA-Z0-9.-_]\\.(com|net|ua){3,64}")
     private String email;
     @NotEmpty(message = "it can't be empty")
+    @Column(nullable = false)
+    @Pattern(regexp = "^[a-zA-Z0-9~!@#$%^*-_=+\\[{\\]}/;:,.?]{8,16}")
     private String password;
     @Size(max=9)
     private String phone;
