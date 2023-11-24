@@ -4,6 +4,9 @@ import com.teamchallenge.marketplace.dto.auth.ChangePasswordRequest;
 import com.teamchallenge.marketplace.exception.NullEntityReferenceException;
 import com.teamchallenge.marketplace.model.User;
 import com.teamchallenge.marketplace.repositories.UserRepository;
+//import com.teamchallenge.marketplace.util.OtpUtil;
+import com.teamchallenge.marketplace.repositories.VerificationTokenRepository;
+import com.teamchallenge.marketplace.token.VerificationToken;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,20 +16,25 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.swing.plaf.UIResource;
 import java.security.Principal;
+import java.util.Calendar;
 import java.util.List;
 
 @Service
-public class UserService {
+public class UserService  {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final VerificationTokenRepository tokenRepository;
+
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
-    public UserService(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder, VerificationTokenRepository tokenRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.tokenRepository = tokenRepository;
     }
 
 
@@ -35,6 +43,7 @@ public class UserService {
             logger.info("Creating user:{}", user);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             return userRepository.save(user);
+
         } else {
             throw new NullEntityReferenceException("Seller cannot be null");
         }
@@ -52,6 +61,7 @@ public class UserService {
         return userRepository.findByEmail(email).orElseThrow(
                 () -> new EntityNotFoundException("User with email " + " not found")
         );
+
     }
 
     public User update(User user) {
@@ -89,5 +99,13 @@ public class UserService {
         //new password
         userRepository.save(user);
     }
+    public int enableUser(String email){
+        return userRepository.enableUser(email);
+    }
+    
+
+
+
+
 
 }
